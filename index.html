@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#34362f">
+<title>DREAM LINE</title>
+<style>
+:root{--bg:#34362f;--gold:#d5b16b;--cream:#eee6d7;--text:#f7f3eb;--muted:#d0c8b9}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+main{width:min(760px,100%);margin:auto;padding:18px 16px 36px}
+header{text-align:center;padding:12px 0 18px;border-bottom:1px solid #bdb5a7}
+.logo{display:block;max-width:100%;width:580px;max-height:220px;object-fit:contain;margin:auto}
+h1{font-size:clamp(1.6rem,5vw,2.6rem);line-height:1.2;text-align:center;margin:26px 0 18px;color:var(--cream)}
+.intro{background:var(--cream);color:#33352f;padding:22px 18px;text-align:center;font-size:clamp(1.1rem,3.6vw,1.5rem);margin:0 0 22px}
+.video-wrap{margin:22px 0;aspect-ratio:16/9;background:#252620;display:flex;align-items:center;justify-content:center;color:var(--muted);border:1px solid #777}
+.video-wrap iframe,.video-wrap video{width:100%;height:100%;border:0}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:12px 18px;background:var(--cream);color:#33352f;text-decoration:none;border:2px solid transparent;font-weight:700;flex:1;min-width:180px;text-align:center}
+.btn:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid #ffdf76;outline-offset:3px}
+footer{text-align:center;border-top:1px solid #aaa397;padding-top:18px;color:var(--muted)}
+footer button{background:none;border:0;color:var(--cream);text-decoration:underline;font-size:1rem;cursor:pointer;padding:10px}
+#accessBtn{position:fixed;z-index:1000;right:10px;top:14px;width:44px;height:44px;border:2px solid white;border-radius:4px;background:#0878d1;color:white;font-size:27px;line-height:1;cursor:pointer;box-shadow:0 2px 8px #0006}
+#accessPanel{position:fixed;z-index:1001;right:10px;top:64px;width:min(310px,calc(100vw - 20px));background:#fff;color:#222;border:2px solid #0878d1;border-radius:8px;padding:14px;box-shadow:0 4px 18px #0008;display:none}
+#accessPanel.open{display:block}#accessPanel h2{font-size:1.15rem;margin:0 0 10px}
+.access-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.access-actions button,#closeAccess{min-height:42px;padding:8px;background:#f1f1f1;color:#111;border:1px solid #666;border-radius:4px;cursor:pointer}
+#closeAccess{margin-top:9px;width:100%;background:#0878d1;color:white}
+dialog{width:min(680px,calc(100% - 24px));max-height:85vh;overflow:auto;border:2px solid var(--gold);border-radius:8px;background:#fff;color:#222;padding:22px}
+dialog::backdrop{background:#000a}dialog h2{margin-top:0}dialog button{min-height:44px;padding:8px 18px}
+body.large-text{font-size:1.25em}body.high-contrast{--bg:#000;--gold:#ff0;--cream:#fff;--text:#fff;--muted:#fff}
+body.links-highlight a{outline:2px solid #ff0!important;text-decoration:underline!important}
+@media(max-width:480px){main{padding:12px 12px 28px}.actions{display:grid}.btn{width:100%}.logo{max-height:180px}}
+</style>
+</head>
+<body>
+<button id="accessBtn" aria-label="Открыть настройки доступности" aria-expanded="false" title="Для слабовидящих">♿</button>
+<section id="accessPanel" aria-label="Настройки доступности" aria-hidden="true">
+<h2>Настройки доступности</h2>
+<div class="access-actions">
+<button id="fontUp">Увеличить текст A+</button>
+<button id="fontDown">Уменьшить текст A−</button>
+<button id="contrast">Высокий контраст</button>
+<button id="highlight">Выделить ссылки</button>
+<button id="resetAccess" style="grid-column:1/-1">Сбросить настройки</button>
+</div>
+<button id="closeAccess">Закрыть</button>
+</section>
+<main>
+<header>
+<img class="logo" src="assets/dream-line-logo.jpg" alt="DREAM LINE" onerror="this.style.display='none'">
+</header>
+<h1 id="headline">Добро пожаловать в DREAM LINE</h1>
+<p class="intro" id="intro">Здесь будет ваш рекламный текст. Его можно заменить на свой.</p>
+<div class="video-wrap" id="videoWrap"><span>Здесь можно разместить видео</span></div>
+<div class="actions">
+<a class="btn" id="mainButton" href="https://example.com">Связаться с нами</a>
+<a class="btn" href="#rules" id="rulesLink">Правила пользования</a>
+</div>
+<footer><div id="footerText">DREAM LINE</div><button id="rulesFooter">Правила пользования</button></footer>
+</main>
+<dialog id="rules">
+<h2 id="rulesTitle">Правила пользования</h2>
+<div id="rulesText">Здесь разместите правила пользования.</div>
+<p><button id="closeRules">Закрыть</button></p>
+</dialog>
+<script>
+const $ = id => document.getElementById(id);
+fetch('content/site.json').then(r=>r.ok?r.json():Promise.reject()).then(c=>{
+  $('headline').textContent=c.headline||c.brand||'DREAM LINE';
+  $('intro').textContent=c.intro||'';
+  $('mainButton').textContent=c.button_text||'Связаться с нами';
+  $('mainButton').href=c.button_url||'#';
+  $('rulesTitle').textContent=c.rules_title||'Правила пользования';
+  $('rulesText').textContent=c.rules_text||'';
+  $('footerText').textContent=c.footer_text||c.brand||'DREAM LINE';
+  if(c.video_url){
+    const wrap=$('videoWrap'); wrap.innerHTML='';
+    if(c.video_url.match(/\.(mp4|webm)(\?.*)?$/i)){const v=document.createElement('video');v.src=c.video_url;v.controls=true;v.playsInline=true;wrap.appendChild(v);}
+    else {const f=document.createElement('iframe');f.src=c.video_url;f.title='Видео DREAM LINE';f.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';f.allowFullscreen=true;wrap.appendChild(f);}
+  }
+}).catch(()=>{});
+const panel=$('accessPanel'), accessBtn=$('accessBtn');
+function togglePanel(open){panel.classList.toggle('open',open);panel.setAttribute('aria-hidden',String(!open));accessBtn.setAttribute('aria-expanded',String(open));}
+accessBtn.addEventListener('click',()=>togglePanel(!panel.classList.contains('open')));
+$('closeAccess').onclick=()=>togglePanel(false);
+let scale=1;
+$('fontUp').onclick=()=>{scale=Math.min(1.6,scale+.1);document.documentElement.style.fontSize=(16*scale)+'px';};
+$('fontDown').onclick=()=>{scale=Math.max(.8,scale-.1);document.documentElement.style.fontSize=(16*scale)+'px';};
+$('contrast').onclick=()=>document.body.classList.toggle('high-contrast');
+$('highlight').onclick=()=>document.body.classList.toggle('links-highlight');
+$('resetAccess').onclick=()=>{scale=1;document.documentElement.style.fontSize='';document.body.classList.remove('high-contrast','links-highlight','large-text');};
+const rules=$('rules');
+function showRules(e){if(e)e.preventDefault();if(rules.showModal)rules.showModal();else alert($('rulesText').textContent);}
+$('rulesLink').onclick=showRules;$('rulesFooter').onclick=showRules;$('closeRules').onclick=()=>rules.close();
+</script>
+</body></html>
