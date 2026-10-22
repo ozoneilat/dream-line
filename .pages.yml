@@ -1,0 +1,37 @@
+media:
+  input: assets
+  output: assets
+content:
+  - name: landing
+    label: Лендинг DREAM LINE
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - name: brand
+        label: Название
+        type: string
+      - name: headline
+        label: Заголовок
+        type: string
+      - name: intro
+        label: Рекламный текст
+        type: text
+      - name: button_text
+        label: Текст основной кнопки
+        type: string
+      - name: button_url
+        label: Ссылка основной кнопки
+        type: string
+      - name: video_url
+        label: Ссылка на видео (необязательно)
+        type: string
+      - name: rules_title
+        label: Заголовок правил
+        type: string
+      - name: rules_text
+        label: Текст правил пользования
+        type: text
+      - name: footer_text
+        label: Текст внизу страницы
+        type: string
